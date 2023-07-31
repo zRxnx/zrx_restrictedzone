@@ -2,6 +2,7 @@ ESX, COOLDOWN = Config.EsxImport(), false
 BLIP_DATA, SPEEDLIMIT_DATA, REMOVECARS_DATA = {}, {}, {}
 local DoesEntityExist = DoesEntityExist
 local GetCurrentResourceName = GetCurrentResourceName
+local RemoveBlip = RemoveBlip
 local SetVehicleMaxSpeed = SetVehicleMaxSpeed
 local PlaySoundFrontend = PlaySoundFrontend
 local GetEntityCoords = GetEntityCoords
