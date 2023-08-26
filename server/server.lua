@@ -24,7 +24,7 @@ RegisterNetEvent('zrx_restrictedzone:server:startSyncBlip', function(data, index
     type(data[4]) ~= 'number' or type(data[5]) ~= 'number' or type(data[6]) ~= 'boolean' or type(data[7]) ~= 'boolean' or
     type(data[8]) ~= 'boolean' or type(data[9]) ~= 'boolean' or type(coords) ~= 'vector3' or type(street) ~= 'string' or
     not temp.allowedJobs[xPlayer.job.name] then
-        return Config.PunishPlayer(source, 'Tried to trigger "zrx_restrictedzone:server:startSyncBlip"')
+        return Config.PunishPlayer(xPlayer.source, 'Tried to trigger "zrx_restrictedzone:server:startSyncBlip"')
     end
 
     if HasCooldown(xPlayer.source) then
@@ -58,11 +58,8 @@ RegisterNetEvent('zrx_restrictedzone:server:startSyncBlip', function(data, index
         DiscordLog(xPlayer.source, 'START BLIP', ('Started a blip at %s street with a %s radius. BIP: %s - CID: %s'):format(street, data[3], #BLIP_DATA, index), 'startBlip')
     end
 
-    for i, data2 in pairs(GetPlayers()) do
-        data2 = tonumber(data2)
-        Config.Notification(data2, data[1])
-        TriggerClientEvent('zrx_restrictedzone:client:startBlip', data2, BLIP_DATA[#BLIP_DATA])
-    end
+    Config.Notification(-1, data[1])
+    TriggerClientEvent('zrx_restrictedzone:client:startBlip', -1, BLIP_DATA[#BLIP_DATA])
 end)
 
 RegisterNetEvent('zrx_restrictedzone:server:removeSyncBlip', function(data, id)
@@ -70,7 +67,7 @@ RegisterNetEvent('zrx_restrictedzone:server:removeSyncBlip', function(data, id)
     local xPlayer = ESX.GetPlayerFromId(source)
 
     if type(id) ~= 'number' or type(data[1]) ~= 'string' or not BLIP_DATA[id].allowedJobs[xPlayer.job.name] then
-        return Config.PunishPlayer(source, 'Tried to trigger "zrx_restrictedzone:server:removeSyncBlip"')
+        return Config.PunishPlayer(xPlayer.source, 'Tried to trigger "zrx_restrictedzone:server:removeSyncBlip"')
     end
 
     if HasCooldown(xPlayer.source) then
@@ -81,11 +78,8 @@ RegisterNetEvent('zrx_restrictedzone:server:removeSyncBlip', function(data, id)
         DiscordLog(xPlayer.source, 'REMOVE BLIP', ('Removed a blip at %s street with a %s radius. BIP: %s - CID: %s'):format(BLIP_DATA[id].street, BLIP_DATA[id].radius, id, BLIP_DATA[id].index), 'removeBlip')
     end
 
-    for i, data2 in pairs(GetPlayers()) do
-        data2 = tonumber(data2)
-        Config.Notification(data2, data[1])
-        TriggerClientEvent('zrx_restrictedzone:client:removeBlip', data2, id)
-    end
+    Config.Notification(-1, data[1])
+    TriggerClientEvent('zrx_restrictedzone:client:removeBlip', -1, id)
 
     BLIP_DATA[id] = nil
 end)
@@ -123,5 +117,5 @@ exports('activeBlips', function()
 end)
 
 exports('hasCooldown', function(player)
-    return COOLDOWN[player]
+    return not not COOLDOWN[player]
 end)

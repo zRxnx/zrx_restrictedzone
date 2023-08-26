@@ -7,7 +7,7 @@ local continueCheck = true
 local getRepoInformations = function()
     local repoVersion, repoURL
 
-    PerformHttpRequest('https://api.github.com/repos/zRxnx/zrx_restrictedzone/releases/latest', function(err, response, headers)
+    PerformHttpRequest('https://api.github.com/repos/zRxnx/zrx_restrictedzone/releases/latest', function(err, response)
         if err == 200 then
             local data = json.decode(response)
 
@@ -26,7 +26,7 @@ local getRepoInformations = function()
     return repoVersion, repoURL
 end
 
-local checkVersion = function(err, responseText, headers)
+local checkVersion = function()
     local repoVersion, repoURL = getRepoInformations()
 
     if curVersion ~= repoVersion then

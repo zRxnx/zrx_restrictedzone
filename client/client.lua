@@ -82,11 +82,11 @@ RegisterNetEvent('zrx_restrictedzone:client:removeBlip', function(id)
     local temp = BLIP_DATA[id]
 
     if temp.playSound then
-        PlaySoundFrontend(-1, "PEYOTE_COMPLETED", "HUD_AWARDS", 0, 1)
+        PlaySoundFrontend(-1, 'PEYOTE_COMPLETED', 'HUD_AWARDS', 0, 1)
     end
 
-    if temp.speedlimit > 0 then
-        if DoesEntityExist(cache.vehicle) then
+    if temp.speedlimit then
+        if DoesEntityExist(cache.vehicle) and Entity(cache.vehicle).zrx_r_speedlimit then
             SetVehicleMaxSpeed(cache.vehicle, 0.0)
         end
 
@@ -137,6 +137,8 @@ CreateThread(function()
                 if data.allowedJobs[ESX.PlayerData.job.name] then goto continue end
 
                 if #(vector3(pedCoords.x, pedCoords.y, pedCoords.z) - vector3(data.coords.x, data.coords.y, data.coords.z)) <= data.range then
+                    SetEntityAsMissionEntity(data2, true, true)
+                    Entity(cache.vehicle).zrx_r_speedlimit = true
                     SetVehicleMaxSpeed(cache.vehicle, data.speed)
                 end
 
