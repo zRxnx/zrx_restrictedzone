@@ -24,8 +24,8 @@ An advanced restricted zone system for FiveM
 
 ### Exports
 
-- activeBlips
-- hasCooldown
+- activeBlips (client & server)
+- hasCooldown (client & server)
 
 ## Requirements
 

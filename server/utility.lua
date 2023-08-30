@@ -1,6 +1,6 @@
 if not Config.CheckForUpdates then return end
 local curResName = GetCurrentResourceName()
-local curVersion = GetResourceMetadata(curResName, 'version')
+local curVersion = GetResourceMetadata(curResName, 'version', 0)
 local resourceName = 'zrx_restrictedzone'
 local continueCheck = true
 

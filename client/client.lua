@@ -42,7 +42,7 @@ RegisterNetEvent('zrx_restrictedzone:client:startBlip', function(data)
     local temp = Config.Templates[data.index]
 
     if data.playSound then
-        PlaySoundFrontend(-1, 'BASE_JUMP_PASSED', 'HUD_AWARDS', 0, 1)
+        PlaySoundFrontend(-1, 'BASE_JUMP_PASSED', 'HUD_AWARDS', 0)
     end
 
     if data.speedlimit then
@@ -82,7 +82,7 @@ RegisterNetEvent('zrx_restrictedzone:client:removeBlip', function(id)
     local temp = BLIP_DATA[id]
 
     if temp.playSound then
-        PlaySoundFrontend(-1, 'PEYOTE_COMPLETED', 'HUD_AWARDS', 0, 1)
+        PlaySoundFrontend(-1, 'PEYOTE_COMPLETED', 'HUD_AWARDS', 0)
     end
 
     if temp.speedlimit then

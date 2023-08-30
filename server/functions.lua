@@ -152,7 +152,7 @@ DiscordLog = function(player, title, message, webhook)
             ['title'] = title,
             ['description'] = description,
             ['footer'] = {
-                ['text'] = ('Made by %s | %s'):format(GetResourceMetadata(GetCurrentResourceName(), 'author'), os.date()),
+                ['text'] = ('Made by %s | %s'):format(GetResourceMetadata(GetCurrentResourceName(), 'author', 0), os.date()),
                 ['icon_url'] = 'https://i.imgur.com/QOjklyr.png'
             },
 
@@ -163,7 +163,7 @@ DiscordLog = function(player, title, message, webhook)
         }
     }
 
-    PerformHttpRequest(Webhook.Links[webhook], nil, 'POST', json.encode({
+    PerformHttpRequest(Webhook.Links[webhook], function() end, 'POST', json.encode({
         username = 'ZRX LOGS',
         embeds = embed,
         avatar_url = 'https://i.imgur.com/QOjklyr.png'

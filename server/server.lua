@@ -10,9 +10,9 @@ RegisterNetEvent('esx:playerLoaded', function(player)
 end)
 
 CreateThread(function()
-    for i, data in pairs(GetPlayers()) do
-        data = tonumber(data)
-        PLAYER_CACHE[data] = GetPlayerData(data)
+    for i, player in pairs(GetPlayers()) do
+        player = tonumber(player)
+        PLAYER_CACHE[player] = GetPlayerData(player)
     end
 end)
 
@@ -58,8 +58,11 @@ RegisterNetEvent('zrx_restrictedzone:server:startSyncBlip', function(data, index
         DiscordLog(xPlayer.source, 'START BLIP', ('Started a blip at %s street with a %s radius. BIP: %s - CID: %s'):format(street, data[3], #BLIP_DATA, index), 'startBlip')
     end
 
-    Config.Notification(-1, data[1])
-    TriggerClientEvent('zrx_restrictedzone:client:startBlip', -1, BLIP_DATA[#BLIP_DATA])
+    for i, player in pairs(GetPlayers()) do
+        player = tonumber(player)
+        Config.Notification(player, data[1])
+        TriggerClientEvent('zrx_restrictedzone:client:startBlip', player, BLIP_DATA[#BLIP_DATA])
+    end
 end)
 
 RegisterNetEvent('zrx_restrictedzone:server:removeSyncBlip', function(data, id)
@@ -78,8 +81,11 @@ RegisterNetEvent('zrx_restrictedzone:server:removeSyncBlip', function(data, id)
         DiscordLog(xPlayer.source, 'REMOVE BLIP', ('Removed a blip at %s street with a %s radius. BIP: %s - CID: %s'):format(BLIP_DATA[id].street, BLIP_DATA[id].radius, id, BLIP_DATA[id].index), 'removeBlip')
     end
 
-    Config.Notification(-1, data[1])
-    TriggerClientEvent('zrx_restrictedzone:client:removeBlip', -1, id)
+    for i, player in pairs(GetPlayers()) do
+        player = tonumber(player)
+        Config.Notification(player, data[1])
+        TriggerClientEvent('zrx_restrictedzone:client:removeBlip', player, id)
+    end
 
     BLIP_DATA[id] = nil
 end)
@@ -92,10 +98,10 @@ CreateThread(function()
             if data.curTime > 0 then
                 BLIP_DATA[i].curTime -= 1
             elseif data.curTime == 0 then
-                for k, data2 in pairs(GetPlayers()) do
-                    data2 = tonumber(data2)
-                    Config.Notification(data2, data.textEnd)
-                    TriggerClientEvent('zrx_restrictedzone:client:removeBlip', data2, i)
+                for k, player in pairs(GetPlayers()) do
+                    player = tonumber(player)
+                    Config.Notification(player, data.textEnd)
+                    TriggerClientEvent('zrx_restrictedzone:client:removeBlip', player, i)
                 end
 
                 if Webhook.Settings.removeBlip then
