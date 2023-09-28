@@ -87,8 +87,7 @@ end
 --| Place here your notification
 Config.Notification = function(player, msg)
     if IsDuplicityVersion() then
-        local xPlayer = ESX.GetPlayerFromId(player)
-        xPlayer.showNotification(msg)
+        TriggerClientEvent('esx:showNotification', player, msg, 'info')
     else
         ESX.ShowNotification(msg)
     end

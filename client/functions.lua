@@ -139,9 +139,9 @@ OpenRemoveMenu = function()
                 { label = Strings.md_job, value = (Strings.md_job_desc):format(data.creator.job) },
                 { label = Strings.md_jobGrade, value = (Strings.md_jobGrade_desc):format(data.creator.grade_label, data.creator.grade) },
                 { label = Strings.md_radius, value = (Strings.md_radius_desc):format(data.radius) },
-                { label = Strings.md_speedlimit, value = (Strings.md_speedlimit_desc):format(data.speedlimit == true and Strings.true_ or Strings.false_) },
-                { label = Strings.md_removecars, value = (Strings.md_removecars_desc):format(data.removeCars == true and Strings.true_ or Strings.false_) },
-                { label = Strings.md_timeout, value = (Strings.md_timeout_desc):format(data.timeout == true and Strings.true_ or Strings.false_) },
+                { label = Strings.md_speedlimit, value = (Strings.md_speedlimit_desc):format((type(data.speedlimit) == 'number' and data.speedlimit) or Strings.false_) },
+                { label = Strings.md_removecars, value = (Strings.md_removecars_desc):format(data.removeCars and Strings.true_ or Strings.false_) },
+                { label = Strings.md_timeout, value = (Strings.md_timeout_desc):format((type(data.timeout) == 'number' and data.timeout) or Strings.false_) },
                 { label = Strings.md_street, value = (Strings.md_street_desc):format(data.street) },
             },
             args = {

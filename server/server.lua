@@ -1,4 +1,6 @@
 ESX, COOLDOWN, PLAYER_CACHE, BLIP_DATA = Config.EsxImport(), {}, {}, {}
+local GetPlayers = GetPlayers
+local TriggerClientEvent = TriggerClientEvent
 
 RegisterNetEvent('esx:playerLoaded', function(player)
     PLAYER_CACHE[player] = GetPlayerData(player)
@@ -27,7 +29,7 @@ RegisterNetEvent('zrx_restrictedzone:server:startSyncBlip', function(data, index
         return Config.PunishPlayer(xPlayer.source, 'Tried to trigger "zrx_restrictedzone:server:startSyncBlip"')
     end
 
-    if HasCooldown(xPlayer.source) then
+    if Player.HasCooldown(xPlayer.source) then
         return Config.Notification(xPlayer.source, 'On cooldown')
     end
 
@@ -73,7 +75,7 @@ RegisterNetEvent('zrx_restrictedzone:server:removeSyncBlip', function(data, id)
         return Config.PunishPlayer(xPlayer.source, 'Tried to trigger "zrx_restrictedzone:server:removeSyncBlip"')
     end
 
-    if HasCooldown(xPlayer.source) then
+    if Player.HasCooldown(xPlayer.source) then
         return Config.Notification(xPlayer.source, 'On cooldown')
     end
 

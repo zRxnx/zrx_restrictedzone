@@ -12,6 +12,7 @@ local IsPedAPlayer = IsPedAPlayer
 local SetEntityAsMissionEntity = SetEntityAsMissionEntity
 local DeleteVehicle = DeleteVehicle
 local GetEntityPopulationType = GetEntityPopulationType
+local vector3 = vector3
 
 RegisterNetEvent('esx:playerLoaded',function(xPlayer)
     ESX.PlayerData = xPlayer
