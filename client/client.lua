@@ -13,6 +13,8 @@ local SetEntityAsMissionEntity = SetEntityAsMissionEntity
 local DeleteVehicle = DeleteVehicle
 local GetEntityPopulationType = GetEntityPopulationType
 local vector3 = vector3
+local NetworkIsPlayerActive = NetworkIsPlayerActive
+local PlayerId = PlayerId
 
 RegisterNetEvent('esx:playerLoaded',function(xPlayer)
     ESX.PlayerData = xPlayer
@@ -53,6 +55,13 @@ RegisterNetEvent('zrx_restrictedzone:client:startBlip', function(data)
             range = data.radius,
             allowedJobs = data.allowedJobs
         }
+
+        local pedCoords = GetEntityCoords(cache.ped)
+        if DoesEntityExist(cache.vehicle) and #(vector3(data.coords.x, data.coords.y, data.coords.z) - vector3(pedCoords.x, pedCoords.y, pedCoords.z)) <= data.radius then
+            SetVehicleMaxSpeed(cache.vehicle, data.speed)
+            Entity(cache.vehicle).state.zrx_r_speedlimit = {}
+            Entity(cache.vehicle).state.zrx_r_speedlimit[#SPEEDLIMIT_DATA] = true
+        end
     end
 
     if data.removeCars then
@@ -75,7 +84,8 @@ RegisterNetEvent('zrx_restrictedzone:client:startBlip', function(data)
         speedlimitI = #SPEEDLIMIT_DATA,
         removeCarsI = #REMOVECARS_DATA,
         street = data.street,
-        radius = data.radius
+        radius = data.radius,
+        coords = data.coords
     }
 end)
 
@@ -87,7 +97,7 @@ RegisterNetEvent('zrx_restrictedzone:client:removeBlip', function(id)
     end
 
     if temp.speedlimit then
-        if DoesEntityExist(cache.vehicle) and Entity(cache.vehicle).zrx_r_speedlimit then
+        if DoesEntityExist(cache.vehicle) and Entity(cache.vehicle).state.zrx_r_speedlimit[temp.speedlimitI] then
             SetVehicleMaxSpeed(cache.vehicle, 0.0)
         end
 
@@ -107,6 +117,10 @@ end)
 CreateThread(function()
     local pedCoords, popType, vehCoords
     local vehicles = {}
+
+    lib.waitFor(function()
+        return NetworkIsPlayerActive(cache.playerId)
+    end, 'Timeout', 120000)
 
     while true do
         if #REMOVECARS_DATA >= 1 then
@@ -130,20 +144,16 @@ CreateThread(function()
             end
         end
 
-        if #SPEEDLIMIT_DATA >= 1 then
+        if #SPEEDLIMIT_DATA >= 1 and DoesEntityExist(cache.vehicle) then
             pedCoords = GetEntityCoords(cache.ped)
 
+            Entity(cache.vehicle).state.zrx_r_speedlimit = {}
             SetVehicleMaxSpeed(cache.vehicle, 0.0)
             for i, data in pairs(SPEEDLIMIT_DATA) do
-                if data.allowedJobs[ESX.PlayerData.job.name] then goto continue end
-
-                if #(vector3(pedCoords.x, pedCoords.y, pedCoords.z) - vector3(data.coords.x, data.coords.y, data.coords.z)) <= data.range then
-                    SetEntityAsMissionEntity(data2, true, true)
-                    Entity(cache.vehicle).zrx_r_speedlimit = true
+                if not data.allowedJobs[ESX.PlayerData.job.name] and #(vector3(pedCoords.x, pedCoords.y, pedCoords.z) - vector3(data.coords.x, data.coords.y, data.coords.z)) <= data.range then
+                    Entity(cache.vehicle).state.zrx_r_speedlimit[i] = true
                     SetVehicleMaxSpeed(cache.vehicle, data.speed)
                 end
-
-                ::continue::
             end
         end
 

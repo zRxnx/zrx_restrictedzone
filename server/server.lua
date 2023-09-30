@@ -125,5 +125,5 @@ exports('activeBlips', function()
 end)
 
 exports('hasCooldown', function(player)
-    return not not COOLDOWN[player]
+    return not not COOLDOWN[PLAYER_CACHE[player].license]
 end)
