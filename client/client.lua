@@ -1,4 +1,5 @@
-ESX, COOLDOWN = Config.EsxImport(), false
+CORE = exports.zrx_utility:GetUtility()
+COOLDOWN = false
 BLIP_DATA, SPEEDLIMIT_DATA, REMOVECARS_DATA = {}, {}, {}
 local DoesEntityExist = DoesEntityExist
 local GetCurrentResourceName = GetCurrentResourceName
@@ -14,19 +15,10 @@ local DeleteVehicle = DeleteVehicle
 local GetEntityPopulationType = GetEntityPopulationType
 local vector3 = vector3
 local NetworkIsPlayerActive = NetworkIsPlayerActive
-local PlayerId = PlayerId
 
-RegisterNetEvent('esx:playerLoaded',function(xPlayer)
-    ESX.PlayerData = xPlayer
+CORE.Client.RegisterKeyMappingCommand(Config.Command, Strings.cmd_desc, Config.Key, function()
+    OpenMainMenu()
 end)
-
-RegisterNetEvent('esx:setJob', function(job)
-	ESX.PlayerData.job = job
-end)
-
-RegisterCommand(Config.Command, function() OpenMainMenu() end)
-RegisterKeyMapping(Config.Command, Strings.cmd_sug, 'keyboard', Config.Key)
-TriggerEvent('chat:addSuggestion', ('/%s'):format(Config.Command), Strings.cmd_sug, {})
 
 RegisterNetEvent('onClientResourceStop', function(res)
     if res ~= GetCurrentResourceName() then return end
@@ -42,7 +34,7 @@ RegisterNetEvent('onClientResourceStop', function(res)
 end)
 
 RegisterNetEvent('zrx_restrictedzone:client:startBlip', function(data)
-    local temp = Config.Templates[data.index]
+    local temp = Config.Templates[data.cindex]
 
     if data.playSound then
         PlaySoundFrontend(-1, 'BASE_JUMP_PASSED', 'HUD_AWARDS', 0)
@@ -74,23 +66,79 @@ RegisterNetEvent('zrx_restrictedzone:client:startBlip', function(data)
     BLIP_DATA[#BLIP_DATA + 1] = {
         creator = data.creator,
         allowedJobs = data.allowedJobs,
-        index = data.index,
+        cindex = data.cindex,
         displayBlip = temp.displayBlip(vector3(data.coords.x, data.coords.y, data.coords.z)),
         radiusBlip = temp.radiusBlip(vector3(data.coords.x, data.coords.y, data.coords.z), data.radius),
         speedlimit = data.speedlimit,
         timeout = data.timeout,
         removeCars = data.removeCars,
         playSound = data.playSound,
-        speedlimitI = #SPEEDLIMIT_DATA,
-        removeCarsI = #REMOVECARS_DATA,
+        speedlimitI = data.speedlimit == true and #SPEEDLIMIT_DATA or false,
+        removeCarsI = data.removeCars == true and #REMOVECARS_DATA or false,
         street = data.street,
         radius = data.radius,
         coords = data.coords
     }
 end)
 
-RegisterNetEvent('zrx_restrictedzone:client:removeBlip', function(id)
-    local temp = BLIP_DATA[id]
+RegisterNetEvent('zrx_restrictedzone:client:editBlip', function(data, index)
+    local oldData = BLIP_DATA[index]
+    local temp = Config.Templates[data.cindex]
+
+    if data.playSound and not oldData.playSound then
+        PlaySoundFrontend(-1, 'BASE_JUMP_PASSED', 'HUD_AWARDS', 0)
+    end
+
+    if not data.playSound and oldData.playSound then
+        PlaySoundFrontend(-1, 'PEYOTE_COMPLETED', 'HUD_AWARDS', 0)
+    end
+
+    if data.speedlimit then
+        SPEEDLIMIT_DATA[data.speedlimitI or #SPEEDLIMIT_DATA + 1] = {
+            speed =  Config.KPH and data.speedlimit / 3.6 or data.speedlimit / 2.236936,
+            coords = data.coords,
+            range = data.radius,
+            allowedJobs = data.allowedJobs
+        }
+
+        local pedCoords = GetEntityCoords(cache.ped)
+        if DoesEntityExist(cache.vehicle) and #(vector3(data.coords.x, data.coords.y, data.coords.z) - vector3(pedCoords.x, pedCoords.y, pedCoords.z)) <= data.radius then
+            SetVehicleMaxSpeed(cache.vehicle, data.speed)
+            Entity(cache.vehicle).state.zrx_r_speedlimit = {}
+            Entity(cache.vehicle).state.zrx_r_speedlimit[data.speedlimitI or #SPEEDLIMIT_DATA] = true
+        end
+    end
+
+    if data.removeCars then
+        REMOVECARS_DATA[data.removeCarsI or #REMOVECARS_DATA + 1] = {
+            coords = data.coords,
+            range = data.radius
+        }
+    end
+
+    RemoveBlip(oldData.displayBlip)
+    RemoveBlip(oldData.radiusBlip)
+
+    BLIP_DATA[index] = {
+        creator = data.creator,
+        allowedJobs = data.allowedJobs,
+        cindex = data.cindex,
+        displayBlip = temp.displayBlip(vector3(data.coords.x, data.coords.y, data.coords.z)),
+        radiusBlip = temp.radiusBlip(vector3(data.coords.x, data.coords.y, data.coords.z), data.radius),
+        speedlimit = data.speedlimit,
+        timeout = data.timeout,
+        removeCars = data.removeCars,
+        playSound = data.playSound,
+        speedlimitI = data.speedlimit == true and #SPEEDLIMIT_DATA or false,
+        removeCarsI = data.removeCars == true and #REMOVECARS_DATA or false,
+        street = data.street,
+        radius = data.radius,
+        coords = data.coords
+    }
+end)
+
+RegisterNetEvent('zrx_restrictedzone:client:removeBlip', function(index)
+    local temp = BLIP_DATA[index]
 
     if temp.playSound then
         PlaySoundFrontend(-1, 'PEYOTE_COMPLETED', 'HUD_AWARDS', 0)
@@ -111,7 +159,7 @@ RegisterNetEvent('zrx_restrictedzone:client:removeBlip', function(id)
     RemoveBlip(temp.displayBlip)
     RemoveBlip(temp.radiusBlip)
 
-    BLIP_DATA[id] = nil
+    BLIP_DATA[index] = nil
 end)
 
 CreateThread(function()
@@ -150,7 +198,7 @@ CreateThread(function()
             Entity(cache.vehicle).state.zrx_r_speedlimit = {}
             SetVehicleMaxSpeed(cache.vehicle, 0.0)
             for i, data in pairs(SPEEDLIMIT_DATA) do
-                if not data.allowedJobs[ESX.PlayerData.job.name] and #(vector3(pedCoords.x, pedCoords.y, pedCoords.z) - vector3(data.coords.x, data.coords.y, data.coords.z)) <= data.range then
+                if not data.allowedJobs[CORE.Bridge.getVariables().job.name] and #(vector3(pedCoords.x, pedCoords.y, pedCoords.z) - vector3(data.coords.x, data.coords.y, data.coords.z)) <= data.range then
                     Entity(cache.vehicle).state.zrx_r_speedlimit[i] = true
                     SetVehicleMaxSpeed(cache.vehicle, data.speed)
                 end

@@ -5,10 +5,10 @@ use_experimental_fxv2_oal 'yes'
 
 author 'zRxnx'
 description 'Advanced restricted zone system'
-version '1.3.2'
+version '1.4.0'
 
 dependencies {
-    'es_extended',
+    'zrx_utility',
 	'ox_lib'
 }
 

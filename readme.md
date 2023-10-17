@@ -29,14 +29,14 @@ An advanced restricted zone system for FiveM
 
 ## Requirements
 
-- es_extended (> 1.6.0)
+- zrx_utility (latest)
 - ox_lib (latest)
 
 ## Preview
 
-### [Video](https://youtu.be/LwGAYKjIKWU)
+### [Video](https://youtu.be/bmdL6-26QG4?si=4xS4-2oidb3b9u2L)
 
-![Discord Log](https://i.imgur.com/M2RP0rm.png)
+![Discord Log](https://i.imgur.com/TDfftS2.png)
 ![Main Page](https://i.imgur.com/Cg9kLhG.png)
 ![Create Dialog](https://i.imgur.com/kyJq56v.png)
 

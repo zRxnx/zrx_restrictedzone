@@ -76,29 +76,20 @@ Config.PunishPlayer = function(player, reason)
         DiscordLog(player, 'PUNISH', reason, 'punish')
     end
 
+    if Webhook.Links.punish:len() > 0 then
+        local message = ([[
+            The player got punished
+
+            Reason: **%s**
+        ]]):format(reason)
+
+        CORE.Server.DiscordLog(player, 'PUNISH', message, Webhook.Links.punish)
+    end
+
     DropPlayer(player, reason)
 end
 
 --| Place your checks here before the personal menu opens
 Config.CanOpenMenu = function()
-    return ESX.IsPlayerLoaded()
-end
-
---| Place here your notification
-Config.Notification = function(player, msg)
-    if IsDuplicityVersion() then
-        TriggerClientEvent('esx:showNotification', player, msg, 'info')
-    else
-        ESX.ShowNotification(msg)
-    end
-end
-
---| Place here your esx import
---| Change it if you know what you are doing
-Config.EsxImport = function()
-	if IsDuplicityVersion() then
-		return exports.es_extended:getSharedObject()
-	else
-		return exports.es_extended:getSharedObject()
-	end
+    return CORE.Bridge.isPlayerLoaded()
 end
