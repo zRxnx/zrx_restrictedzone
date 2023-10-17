@@ -37,7 +37,7 @@ An advanced restricted zone system for FiveM
 ### [Video](https://youtu.be/bmdL6-26QG4?si=4xS4-2oidb3b9u2L)
 
 ![Discord Log](https://i.imgur.com/TDfftS2.png)
-![Main Page](https://i.imgur.com/Cg9kLhG.png)
+![Main Page](https://i.imgur.com/xxQMIIF.png)
 ![Create Dialog](https://i.imgur.com/kyJq56v.png)
 
 ## Installation
