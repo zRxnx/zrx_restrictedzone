@@ -69,5 +69,8 @@ Strings = {
     md_removecars = 'Remove NPC cars',
     md_timeout = 'Timeout',
     md_street = 'Street',
-    md_street_desc = '%s'
+    md_street_desc = '%s',
+
+    sure = 'Are you sure?',
+    sure_desc = 'Are you sure to remove the restricted zone',
 }

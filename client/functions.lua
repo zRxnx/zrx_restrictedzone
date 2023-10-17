@@ -395,6 +395,17 @@ OpenRemoveMenu = function()
                 id = i
             },
             onSelect = function(args)
+                local alert = lib.alertDialog({
+                    header = Strings.sure,
+                    content = Strings.sure_desc,
+                    centered = true,
+                    cancel = true
+                })
+
+                if alert == 'cancel' then
+                    return OpenRemoveMenu()
+                end
+
                 local input = lib.inputDialog(Strings.title, {
                     {
                         type = 'textarea',
