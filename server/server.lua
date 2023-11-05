@@ -27,9 +27,9 @@ RegisterNetEvent('zrx_restrictedzone:server:startSyncBlip', function(data, cinde
     local xPlayer = CORE.Bridge.getVariables(source)
     local temp = Config.Templates[cindex]
 
-    if type(cindex) ~= 'number' or type(data[1]) ~= 'string' or type(data[2]) ~= 'string' or type(data[3]) ~= 'number' or
-    type(data[4]) ~= 'number' or type(data[5]) ~= 'number' or type(data[6]) ~= 'boolean' or type(data[7]) ~= 'boolean' or
-    type(data[8]) ~= 'boolean' or type(data[9]) ~= 'boolean' or type(coords) ~= 'vector3' or type(street) ~= 'string' or
+    if type(cindex) ~= 'number' or type(data.textStart) ~= 'string' or type(data.textEnd) ~= 'string' or type(data.radius) ~= 'number' or
+    (type(data.speedlimit) ~= 'boolean' and type(data.speedlimit) ~= 'number') or (type(data.timeout) ~= 'boolean' and type(data.timeout) ~= 'number') or
+    type(data.removeCars) ~= 'boolean' or type(data.playSound) ~= 'boolean' or type(coords) ~= 'vector3' or type(street) ~= 'string' or
     not temp.allowedJobs[xPlayer.job.name] then
         return Config.PunishPlayer(xPlayer.player, 'Tried to trigger "zrx_restrictedzone:server:startSyncBlip"')
     end
@@ -50,14 +50,14 @@ RegisterNetEvent('zrx_restrictedzone:server:startSyncBlip', function(data, cinde
         allowedJobs = temp.allowedJobs,
         coords = coords,
         cindex = cindex,
-        textStart = data[1],
-        textEnd = data[2],
-        radius = data[3],
-        speedlimit = data[8] == true and data[4] or false,
-        timeout = data[9] == true and data[5] or false,
-        curTime = data[5] * 60,
-        removeCars = data[6],
-        playSound = data[7],
+        textStart = data.textStart,
+        textEnd = data.textEnd,
+        radius = data.radius,
+        speedlimit = data.speedlimit,
+        timeout = data.timeout,
+        curTime = type(data.timeout) == 'number' and data.timeout * 60,
+        removeCars = data.removeCars,
+        playSound = data.playSound,
         street = street,
     }
 
@@ -75,15 +75,15 @@ RegisterNetEvent('zrx_restrictedzone:server:startSyncBlip', function(data, cinde
             Timeout: **%s**
             Remove NPC Cars: **%s**
             Playsound: **%s**
-        ]]):format(street, data[3], #BLIP_DATA, cindex, BLIP_DATA[#BLIP_DATA].textStart, BLIP_DATA[#BLIP_DATA].textEnd,
-        BLIP_DATA[#BLIP_DATA].speedlimit, BLIP_DATA[#BLIP_DATA].timeout, BLIP_DATA[#BLIP_DATA].removeCars, BLIP_DATA[#BLIP_DATA].playSound)
+        ]]):format(street, data.radius, #BLIP_DATA, cindex, data.textStart, data.textEnd,
+        data.speedlimit, data.timeout, data.removeCars, data.playSound)
 
         CORE.Server.DiscordLog(xPlayer.player, 'START ZONE', message, Webhook.Links.startBlip)
     end
 
     for i, player in pairs(GetPlayers()) do
         player = tonumber(player)
-        CORE.Bridge.notification(player, data[1])
+        CORE.Bridge.notification(player, data.textStart)
         TriggerClientEvent('zrx_restrictedzone:client:startBlip', player, BLIP_DATA[#BLIP_DATA])
     end
 end)
@@ -92,24 +92,24 @@ RegisterNetEvent('zrx_restrictedzone:server:editSyncBlip', function(data, index)
     local xPlayer = CORE.Bridge.getVariables(source)
     local temp = Config.Templates[BLIP_DATA[index].cindex]
 
-    if type(index) ~= 'number' or type(data[1]) ~= 'string' or type(data[2]) ~= 'string' or type(data[3]) ~= 'number' or type(data[4]) ~= 'number' or
-    type(data[5]) ~= 'number' or type(data[6]) ~= 'boolean' or type(data[7]) ~= 'boolean' or type(data[8]) ~= 'boolean' or type(data[9]) ~= 'boolean' or
-    not temp.allowedJobs[xPlayer.job.name] then
-        return Config.PunishPlayer(xPlayer.player, 'Tried to trigger "zrx_restrictedzone:server:editSyncBlip"')
+    if type(index) ~= 'number' or type(data.textUpdate) ~= 'string' or type(data.textEnd) ~= 'string' or type(data.radius) ~= 'number' or
+    (type(data.speedlimit) ~= 'boolean' and type(data.speedlimit) ~= 'number') or (type(data.timeout) ~= 'boolean' and type(data.timeout) ~= 'number') or
+    type(data.removeCars) ~= 'boolean' or type(data.playSound) ~= 'boolean' or not temp.allowedJobs[xPlayer.job.name] then
+        return Config.PunishPlayer(xPlayer.player, 'Tried to trigger "zrx_restrictedzone:server:startSyncBlip"')
     end
 
     if Player.HasCooldown(xPlayer.player) then
         return CORE.Bridge.notification(xPlayer.player, Strings.cooldown)
     end
 
-    BLIP_DATA[index].textUpdate = data[1]
-    BLIP_DATA[index].textEnd = data[2]
-    BLIP_DATA[index].radius = data[3]
-    BLIP_DATA[index].speedlimit = data[8] == true and data[4] or false
-    BLIP_DATA[index].timeout = data[9] == true and data[5] or false
-    BLIP_DATA[index].curTime = data[5] * 60
-    BLIP_DATA[index].playSound = data[7]
-    BLIP_DATA[index].removeCars = data[6]
+    BLIP_DATA[index].textUpdate = data.textUpdate
+    BLIP_DATA[index].textEnd = data.textEnd
+    BLIP_DATA[index].radius = data.radius
+    BLIP_DATA[index].speedlimit = data.speedlimit
+    BLIP_DATA[index].timeout = data.timeout
+    BLIP_DATA[index].curTime = type(data.timeout) == 'number' and data.timeout * 60
+    BLIP_DATA[index].playSound = data.playSound
+    BLIP_DATA[index].removeCars = data.removeCars
 
     if Webhook.Links.editBlip:len() > 0 then
         local message = ([[
@@ -124,15 +124,15 @@ RegisterNetEvent('zrx_restrictedzone:server:editSyncBlip', function(data, index)
             Timeout: **%s**
             Remove NPC Cars: **%s**
             Playsound: **%s**
-        ]]):format(BLIP_DATA[index].radius, index, BLIP_DATA[index].cindex, BLIP_DATA[index].textStart, BLIP_DATA[index].textEnd,
-        BLIP_DATA[index].speedlimit, BLIP_DATA[index].timeout, BLIP_DATA[index].removeCars, BLIP_DATA[index].playSound)
+        ]]):format(data.radius, index, BLIP_DATA[index].cindex, BLIP_DATA[index].textStart, data.textEnd,
+        data.speedlimit, data.timeout, data.removeCars, data.playSound)
 
         CORE.Server.DiscordLog(xPlayer.player, 'EDIT ZONE', message, Webhook.Links.editBlip)
     end
 
     for i, player in pairs(GetPlayers()) do
         player = tonumber(player)
-        CORE.Bridge.notification(player, data[1])
+        CORE.Bridge.notification(player, data.textUpdate)
         TriggerClientEvent('zrx_restrictedzone:client:editBlip', player, BLIP_DATA[index], index)
     end
 end)
@@ -140,7 +140,7 @@ end)
 RegisterNetEvent('zrx_restrictedzone:server:removeSyncBlip', function(data, index)
     local xPlayer = CORE.Bridge.getVariables(source)
 
-    if type(index) ~= 'number' or type(data[1]) ~= 'string' or not BLIP_DATA[index].allowedJobs[xPlayer.job.name] then
+    if type(index) ~= 'number' or type(data.textEnd) ~= 'string' or not BLIP_DATA[index].allowedJobs[xPlayer.job.name] then
         return Config.PunishPlayer(xPlayer.player, 'Tried to trigger "zrx_restrictedzone:server:removeSyncBlip"')
     end
 
@@ -156,14 +156,15 @@ RegisterNetEvent('zrx_restrictedzone:server:removeSyncBlip', function(data, inde
             Radius: **%s**
             Blip Index: **%s**
             Config Index: **%s**
-        ]]):format(BLIP_DATA[index].street, BLIP_DATA[index].radius, index, BLIP_DATA[index].cindex)
+            Text End: **%s**
+        ]]):format(BLIP_DATA[index].street, BLIP_DATA[index].radius, index, BLIP_DATA[index].cindex, data.textEnd)
 
         CORE.Server.DiscordLog(xPlayer.player, 'REMOVE ZONE', message, Webhook.Links.removeBlip)
     end
 
     for i, player in pairs(GetPlayers()) do
         player = tonumber(player)
-        CORE.Bridge.notification(player, data[1])
+        CORE.Bridge.notification(player, data.textEnd)
         TriggerClientEvent('zrx_restrictedzone:client:removeBlip', player, index)
     end
 

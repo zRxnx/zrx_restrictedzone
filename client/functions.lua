@@ -56,13 +56,10 @@ OpenMainMenu = function()
         end
     }
 
-    lib.registerContext({
+    CORE.Client.CreateMenu({
         id = 'zrx_restrictedzone:zone:main',
         title = Strings.title,
-        options = MENU,
-    })
-
-    lib.showContext('zrx_restrictedzone:zone:main')
+    }, MENU, Config.Menu.type ~= 'menu', Config.Menu.postition)
 end
 
 OpenCreateMenu = function()
@@ -105,6 +102,11 @@ OpenCreateMenu = function()
                         max = 200
                     },
                     {
+                        type = 'checkbox',
+                        label = Strings.i_use_playsound,
+                        checked = true
+                    },
+                    {
                         type = 'number',
                         label = Strings.i_radius,
                         description = Strings.i_radius_desc,
@@ -114,11 +116,21 @@ OpenCreateMenu = function()
                         max = 200
                     },
                     {
+                        type = 'checkbox',
+                        label = Strings.i_use_removecars,
+                        checked = true
+                    },
+                    {
                         type = 'number',
                         label = Strings.i_speedlimit,
                         description = Strings.i_speedlimit_desc,
                         required = true,
                         default = 50
+                    },
+                    {
+                        type = 'checkbox',
+                        label = Strings.i_use_speedlimit,
+                        checked = true
                     },
                     {
                         type = 'number',
@@ -130,23 +142,8 @@ OpenCreateMenu = function()
                     },
                     {
                         type = 'checkbox',
-                        label = Strings.i_use_removecars,
-                        checked = true
-                    },
-                    {
-                        type = 'checkbox',
-                        label = Strings.i_use_playsound,
-                        checked = true
-                    },
-                    {
-                        type = 'checkbox',
-                        label = Strings.i_use_speedlimit,
-                        checked = true
-                    },
-                    {
-                        type = 'checkbox',
                         label = Strings.i_use_timeout,
-                        checked = false
+                        checked = true
                     },
                 })
 
@@ -155,7 +152,17 @@ OpenCreateMenu = function()
                     return OpenCreateMenu()
                 end
 
-                TriggerServerEvent('zrx_restrictedzone:server:startSyncBlip', input, args.cid, coords, street)
+                local DATA = {
+                    textStart = input[1],
+                    textEnd = input[2],
+                    playSound = input[3],
+                    radius = input[4],
+                    removeCars = input[5],
+                    speedlimit = input[7] == true and input[6],
+                    timeout = input[9] == true and input[8],
+                }
+
+                TriggerServerEvent('zrx_restrictedzone:server:startSyncBlip', DATA, args.cid, coords, street)
 
                 CreateThread(function()
                     local timeout, alpha = 0, 0.5
@@ -173,14 +180,11 @@ OpenCreateMenu = function()
         }
     end
 
-    lib.registerContext({
+    CORE.Client.CreateMenu({
         id = 'zrx_restrictedzone:zone:create',
         title = Strings.title,
-        options = MENU,
         menu = 'zrx_restrictedzone:zone:main'
-    })
-
-    lib.showContext('zrx_restrictedzone:zone:create')
+    }, MENU, Config.Menu.type ~= 'menu', Config.Menu.postition)
 end
 
 OpenEditMenu = function()
@@ -261,6 +265,11 @@ OpenEditMenu = function()
                         max = 200
                     },
                     {
+                        type = 'checkbox',
+                        label = Strings.i_use_playsound,
+                        checked = data.playSound
+                    },
+                    {
                         type = 'number',
                         label = Strings.i_radius,
                         description = Strings.i_radius_desc,
@@ -270,11 +279,21 @@ OpenEditMenu = function()
                         max = 200
                     },
                     {
+                        type = 'checkbox',
+                        label = Strings.i_use_removecars,
+                        checked = data.removeCars
+                    },
+                    {
                         type = 'number',
                         label = Strings.i_speedlimit,
                         description = Strings.i_speedlimit_desc,
                         required = true,
                         default = type(data.speedlimit) == 'number' and data.speedlimit or 50
+                    },
+                    {
+                        type = 'checkbox',
+                        label = Strings.i_use_speedlimit,
+                        checked = type(data.speedlimit) == 'number' and data.speedlimit or true
                     },
                     {
                         type = 'number',
@@ -286,23 +305,8 @@ OpenEditMenu = function()
                     },
                     {
                         type = 'checkbox',
-                        label = Strings.i_use_removecars,
-                        checked = data.removeCars
-                    },
-                    {
-                        type = 'checkbox',
-                        label = Strings.i_use_playsound,
-                        checked = data.playSound
-                    },
-                    {
-                        type = 'checkbox',
-                        label = Strings.i_use_speedlimit,
-                        checked = type(data.speedlimit) == 'number' and data.speedlimit or false
-                    },
-                    {
-                        type = 'checkbox',
                         label = Strings.i_use_timeout,
-                        checked = type(data.timeout) == 'number' and data.timeout or false
+                        checked = type(data.timeout) == 'number' and data.timeout or true
                     },
                 })
 
@@ -311,7 +315,17 @@ OpenEditMenu = function()
                     return OpenEditMenu()
                 end
 
-                TriggerServerEvent('zrx_restrictedzone:server:editSyncBlip', input, args.id)
+                local DATA = {
+                    textUpdate = input[1],
+                    textEnd = input[2],
+                    playSound = input[3],
+                    radius = input[4],
+                    removeCars = input[5],
+                    speedlimit = data[7] == true and data[6] or false,
+                    timeout = data[9] == true and data[8] or false,
+                }
+
+                TriggerServerEvent('zrx_restrictedzone:server:editSyncBlip', DATA, args.id)
 
                 CreateThread(function()
                     local timeout, alpha = 0, 0.5
@@ -329,14 +343,11 @@ OpenEditMenu = function()
         }
     end
 
-    lib.registerContext({
+    CORE.Client.CreateMenu({
         id = 'zrx_restrictedzone:zone:edit',
         title = Strings.title,
-        options = MENU,
         menu = 'zrx_restrictedzone:zone:main'
-    })
-
-    lib.showContext('zrx_restrictedzone:zone:edit')
+    }, MENU, Config.Menu.type ~= 'menu', Config.Menu.postition)
 end
 
 OpenRemoveMenu = function()
@@ -395,17 +406,6 @@ OpenRemoveMenu = function()
                 id = i
             },
             onSelect = function(args)
-                local alert = lib.alertDialog({
-                    header = Strings.sure,
-                    content = Strings.sure_desc,
-                    centered = true,
-                    cancel = true
-                })
-
-                if alert == 'cancel' then
-                    return OpenRemoveMenu()
-                end
-
                 local input = lib.inputDialog(Strings.title, {
                     {
                         type = 'textarea',
@@ -423,7 +423,22 @@ OpenRemoveMenu = function()
                     return OpenRemoveMenu()
                 end
 
-                TriggerServerEvent('zrx_restrictedzone:server:removeSyncBlip', input, args.id)
+                local alert = lib.alertDialog({
+                    header = Strings.sure,
+                    content = Strings.sure_desc,
+                    centered = true,
+                    cancel = true
+                })
+
+                if alert == 'cancel' then
+                    return OpenRemoveMenu()
+                end
+
+                local DATA = {
+                    textEnd = input[1]
+                }
+
+                TriggerServerEvent('zrx_restrictedzone:server:removeSyncBlip', DATA, args.id)
 
                 CreateThread(function()
                     local timeout, alpha = 0, 0.5
@@ -441,14 +456,11 @@ OpenRemoveMenu = function()
         }
     end
 
-    lib.registerContext({
+    CORE.Client.CreateMenu({
         id = 'zrx_restrictedzone:zone:remove',
         title = Strings.title,
-        options = MENU,
         menu = 'zrx_restrictedzone:zone:main'
-    })
-
-    lib.showContext('zrx_restrictedzone:zone:remove')
+    }, MENU, Config.Menu.type ~= 'menu', Config.Menu.postition)
 end
 
 StartCooldown = function()
