@@ -1,3 +1,4 @@
+---@diagnostic disable: cast-local-type, need-check-nil, param-type-mismatch
 COOLDOWN, PLAYER_CACHE, BLIP_DATA = {}, {}, {}
 CORE = exports.zrx_utility:GetUtility()
 local GetPlayers = GetPlayers
@@ -24,7 +25,7 @@ CreateThread(function()
 end)
 
 RegisterNetEvent('zrx_restrictedzone:server:startSyncBlip', function(data, cindex, coords, street)
-    local xPlayer = CORE.Bridge.getVariables(source)
+    local xPlayer = CORE.Bridge.getPlayerObject(source)
     local temp = Config.Templates[cindex]
 
     if type(cindex) ~= 'number' or type(data.textStart) ~= 'string' or type(data.textEnd) ~= 'string' or type(data.radius) ~= 'number' or
@@ -89,7 +90,7 @@ RegisterNetEvent('zrx_restrictedzone:server:startSyncBlip', function(data, cinde
 end)
 
 RegisterNetEvent('zrx_restrictedzone:server:editSyncBlip', function(data, index)
-    local xPlayer = CORE.Bridge.getVariables(source)
+    local xPlayer = CORE.Bridge.getPlayerObject(source)
     local temp = Config.Templates[BLIP_DATA[index].cindex]
 
     if type(index) ~= 'number' or type(data.textUpdate) ~= 'string' or type(data.textEnd) ~= 'string' or type(data.radius) ~= 'number' or
@@ -138,7 +139,7 @@ RegisterNetEvent('zrx_restrictedzone:server:editSyncBlip', function(data, index)
 end)
 
 RegisterNetEvent('zrx_restrictedzone:server:removeSyncBlip', function(data, index)
-    local xPlayer = CORE.Bridge.getVariables(source)
+    local xPlayer = CORE.Bridge.getPlayerObject(source)
 
     if type(index) ~= 'number' or type(data.textEnd) ~= 'string' or not BLIP_DATA[index].allowedJobs[xPlayer.job.name] then
         return Config.PunishPlayer(xPlayer.player, 'Tried to trigger "zrx_restrictedzone:server:removeSyncBlip"')

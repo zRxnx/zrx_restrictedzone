@@ -1,3 +1,4 @@
+---@diagnostic disable: param-type-mismatch
 local GetEntityCoords = GetEntityCoords
 local DrawSphere = DrawSphere
 local GetStreetNameFromHashKey = GetStreetNameFromHashKey
@@ -10,7 +11,7 @@ OpenMainMenu = function()
     local isAllowed = false
 
     for i, data in pairs(Config.Templates) do
-        if data.allowedJobs[CORE.Bridge.getVariables().job.name] then
+        if data.allowedJobs[CORE.Bridge.getPlayerObject().job.name] then
             isAllowed = true
             break
         end
@@ -66,7 +67,7 @@ OpenCreateMenu = function()
     local MENU = {}
     local coords = GetEntityCoords(cache.ped)
     local street = GetStreetNameFromHashKey(GetStreetNameAtCoord(coords.x, coords.y, coords.z))
-    local job = CORE.Bridge.getVariables().job
+    local job = CORE.Bridge.getPlayerObject().job
 
     StartCooldown()
 
@@ -173,7 +174,7 @@ OpenCreateMenu = function()
                         timeout += 1
                         alpha -= 0.001
                         DrawSphere(coords.x, coords.y, coords.z, input[3], r, g, b, alpha)
-                        Wait()
+                        Wait(0)
                     end
                 end)
             end
@@ -336,7 +337,7 @@ OpenEditMenu = function()
                         timeout += 1
                         alpha -= 0.001
                         DrawSphere(data.coords.x, data.coords.y, data.coords.z, input[3], r, g, b, alpha)
-                        Wait()
+                        Wait(0)
                     end
                 end)
             end
@@ -352,7 +353,7 @@ end
 
 OpenRemoveMenu = function()
     local MENU = {}
-    local job = CORE.Bridge.getVariables().job
+    local job = CORE.Bridge.getPlayerObject().job
 
     StartCooldown()
 
@@ -449,7 +450,7 @@ OpenRemoveMenu = function()
                         timeout += 1
                         alpha -= 0.001
                         DrawSphere(data.coords.x, data.coords.y, data.coords.z, data.radius, r, g, b, alpha)
-                        Wait()
+                        Wait(0)
                     end
                 end)
             end

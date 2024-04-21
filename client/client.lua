@@ -37,7 +37,7 @@ RegisterNetEvent('zrx_restrictedzone:client:startBlip', function(data)
     local temp = Config.Templates[data.cindex]
 
     if data.playSound then
-        PlaySoundFrontend(-1, 'BASE_JUMP_PASSED', 'HUD_AWARDS', 0)
+        PlaySoundFrontend(-1, 'BASE_JUMP_PASSED', 'HUD_AWARDS', false)
     end
 
     if data.speedlimit then
@@ -86,11 +86,11 @@ RegisterNetEvent('zrx_restrictedzone:client:editBlip', function(data, index)
     local temp = Config.Templates[data.cindex]
 
     if data.playSound and not oldData.playSound then
-        PlaySoundFrontend(-1, 'BASE_JUMP_PASSED', 'HUD_AWARDS', 0)
+        PlaySoundFrontend(-1, 'BASE_JUMP_PASSED', 'HUD_AWARDS', false)
     end
 
     if not data.playSound and oldData.playSound then
-        PlaySoundFrontend(-1, 'PEYOTE_COMPLETED', 'HUD_AWARDS', 0)
+        PlaySoundFrontend(-1, 'PEYOTE_COMPLETED', 'HUD_AWARDS', false)
     end
 
     if data.speedlimit then
@@ -141,7 +141,7 @@ RegisterNetEvent('zrx_restrictedzone:client:removeBlip', function(index)
     local temp = BLIP_DATA[index]
 
     if temp.playSound then
-        PlaySoundFrontend(-1, 'PEYOTE_COMPLETED', 'HUD_AWARDS', 0)
+        PlaySoundFrontend(-1, 'PEYOTE_COMPLETED', 'HUD_AWARDS', false)
     end
 
     if temp.speedlimit then
@@ -198,7 +198,7 @@ CreateThread(function()
             Entity(cache.vehicle).state.zrx_r_speedlimit = {}
             SetVehicleMaxSpeed(cache.vehicle, 0.0)
             for i, data in pairs(SPEEDLIMIT_DATA) do
-                if not data.allowedJobs[CORE.Bridge.getVariables().job.name] and #(vector3(pedCoords.x, pedCoords.y, pedCoords.z) - vector3(data.coords.x, data.coords.y, data.coords.z)) <= data.range then
+                if not data.allowedJobs[CORE.Bridge.getPlayerObject().job.name] and #(vector3(pedCoords.x, pedCoords.y, pedCoords.z) - vector3(data.coords.x, data.coords.y, data.coords.z)) <= data.range then
                     Entity(cache.vehicle).state.zrx_r_speedlimit[i] = true
                     SetVehicleMaxSpeed(cache.vehicle, data.speed)
                 end
