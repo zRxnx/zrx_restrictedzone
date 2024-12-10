@@ -192,7 +192,7 @@ OpenEditMenu = function()
     local MENU = {}
     local coords = GetEntityCoords(cache.ped)
     local street = GetStreetNameFromHashKey(GetStreetNameAtCoord(coords.x, coords.y, coords.z))
-    local job = CORE.Bridge.getVariables().job
+    local job = CORE.Bridge.getPlayerObject().job
 
     StartCooldown()
 

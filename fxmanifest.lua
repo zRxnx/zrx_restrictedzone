@@ -5,7 +5,7 @@ use_experimental_fxv2_oal 'yes'
 
 author 'zRxnx'
 description 'Advanced restricted zone system'
-version '1.6.1'
+version '1.6.2'
 
 docs 'https://docs.zrxnx.at'
 discord 'https://discord.gg/mcN25FJ33K'
