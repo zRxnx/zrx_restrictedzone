@@ -1,8 +1,4 @@
 ---@diagnostic disable: param-type-mismatch
-local GetEntityCoords = GetEntityCoords
-local DrawSphere = DrawSphere
-local GetStreetNameFromHashKey = GetStreetNameFromHashKey
-local GetStreetNameAtCoord = GetStreetNameAtCoord
 
 OpenMainMenu = function()
     if not Config.CanOpenMenu() then return end

@@ -1,20 +1,6 @@
 CORE = exports.zrx_utility:GetUtility()
 COOLDOWN = false
 BLIP_DATA, SPEEDLIMIT_DATA, REMOVECARS_DATA = {}, {}, {}
-local DoesEntityExist = DoesEntityExist
-local GetCurrentResourceName = GetCurrentResourceName
-local RemoveBlip = RemoveBlip
-local SetVehicleMaxSpeed = SetVehicleMaxSpeed
-local PlaySoundFrontend = PlaySoundFrontend
-local GetEntityCoords = GetEntityCoords
-local GetGamePool = GetGamePool
-local GetPedInVehicleSeat = GetPedInVehicleSeat
-local IsPedAPlayer = IsPedAPlayer
-local SetEntityAsMissionEntity = SetEntityAsMissionEntity
-local DeleteVehicle = DeleteVehicle
-local GetEntityPopulationType = GetEntityPopulationType
-local vector3 = vector3
-local NetworkIsPlayerActive = NetworkIsPlayerActive
 
 CORE.Client.RegisterKeyMappingCommand(Config.Command, Strings.cmd_desc, Config.Key, function()
     OpenMainMenu()

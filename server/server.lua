@@ -1,8 +1,6 @@
 ---@diagnostic disable: cast-local-type, need-check-nil, param-type-mismatch
 COOLDOWN, PLAYER_CACHE, BLIP_DATA = {}, {}, {}
 CORE = exports.zrx_utility:GetUtility()
-local GetPlayers = GetPlayers
-local TriggerClientEvent = TriggerClientEvent
 
 RegisterNetEvent('zrx_utility:bridge:playerLoaded', function(player)
     PLAYER_CACHE[player] = CORE.Server.GetPlayerCache(player)
