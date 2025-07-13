@@ -3,22 +3,25 @@ game 'gta5'
 lua54 'yes'
 use_experimental_fxv2_oal 'yes'
 
+name 'zrx_restrictedzone'
 author 'zRxnx'
+version '2.0.0'
 description 'Advanced restricted zone system'
-version '1.6.2'
+repository 'https://github.com/zrxnx/zrx_restrictedzone'
 
 docs 'https://docs.zrxnx.at'
-discord 'https://discord.gg/mcN25FJ33K'
+discord 'https://discord.zrxnx.at'
 
 dependencies {
-    'zrx_utility',
+    '/server:6116',
+    '/onesync',
 	'ox_lib'
 }
 
 shared_scripts {
     '@ox_lib/init.lua',
-    'configuration/config.lua',
-    'configuration/strings.lua'
+    'configuration/*.lua',
+    'utils.lua',
 }
 
 client_scripts {
@@ -26,6 +29,5 @@ client_scripts {
 }
 
 server_scripts {
-    'configuration/webhook.lua',
     'server/*.lua'
 }
