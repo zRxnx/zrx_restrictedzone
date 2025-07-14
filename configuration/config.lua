@@ -23,16 +23,30 @@ Config.Template = {
 
         blip = {
             sprite = 161,
-            colour = 1,
+            colour = {
+                r = 0,
+                g = 0,
+                b = 255,
+                a = 255
+            },
             scale = 0.5,
             alpha = 255,
             short = false,
+            flash = true,
+            flashTime = 400,
             displayText = 'Restrictedzone'
         },
 
         radiusBlip = {
             alpha = 140,
-            colour = 1,
+            colour = {
+                r = 0,
+                g = 0,
+                b = 255,
+                a = 255
+            },
+            flash = true,
+            flashTime = 400,
         },
     },
 }
