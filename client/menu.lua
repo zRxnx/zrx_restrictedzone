@@ -135,6 +135,12 @@ OpenCreateMenu = function()
                     max = 20,
                 }
 
+                INPUT[#INPUT + 1] = {
+                    type = 'checkbox',
+                    label = Strings.remove_cars,
+                    checked = false,
+                }
+
                 local input = lib.inputDialog(Strings.title, INPUT)
 
                 if not input then
@@ -166,6 +172,8 @@ OpenCreateMenu = function()
                 DATA.coords = coords
                 DATA.index = name
                 DATA.displayText = input[8]
+
+                DATA.removeCars = input[9]
 
                 print(json.encode(DATA, { indent = true }))
 

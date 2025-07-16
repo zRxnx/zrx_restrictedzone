@@ -23,7 +23,7 @@ Config.Template = {
 
         blip = {
             sprite = 161,
-            colour = {
+            colour = { --| supports rgba and default gta colors
                 r = 0,
                 g = 0,
                 b = 255,
@@ -39,7 +39,7 @@ Config.Template = {
 
         radiusBlip = {
             alpha = 140,
-            colour = {
+            colour = { --| supports rgba and default gta colors
                 r = 0,
                 g = 0,
                 b = 255,

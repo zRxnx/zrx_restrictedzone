@@ -1,3 +1,4 @@
+---@diagnostic disable: param-type-mismatch
 CreateZone = function(data)
     BLIP_DATA[data.bId] = data
 
@@ -61,10 +62,15 @@ CreateZone = function(data)
     })
 
     local blip = AddBlipForCoord(data.coords.x, data.coords.y, data.coords.z)
-    local color = ('0x%02X%02X%02X%02X'):format(cfg.blip.colour.r, cfg.blip.colour.g, cfg.blip.colour.b, cfg.blip.colour.a)
 
     SetBlipSprite(blip, cfg.blip.sprite)
-    SetBlipColour(blip, tonumber(color))
+
+    if type(cfg.blip.color) == 'table' then
+        SetBlipColour(blip, tonumber(('0x%02X%02X%02X%02X'):format(cfg.blip.colour.r, cfg.blip.colour.g, cfg.blip.colour.b, cfg.blip.colour.a)))
+    else
+        SetBlipColour(blip, cfg.blip.color)
+    end
+
     SetBlipScale(blip, cfg.blip.scale)
     SetBlipAlpha(blip, cfg.blip.alpha)
     SetBlipAsShortRange(blip, cfg.blip.short)
@@ -75,10 +81,15 @@ CreateZone = function(data)
     EndTextCommandSetBlipName(blip)
 
     local radiusBlip = AddBlipForRadius(data.coords.x, data.coords.y, data.coords.z, data.radius)
-    color = ('0x%02X%02X%02X%02X'):format(cfg.radiusBlip.colour.r, cfg.radiusBlip.colour.g, cfg.radiusBlip.colour.b, cfg.radiusBlip.colour.a)
 
     SetBlipAlpha(radiusBlip, cfg.radiusBlip.alpha)
-    SetBlipColour(radiusBlip, tonumber(color))
+
+    if type(cfg.radiusBlip.color) == 'table' then
+        SetBlipColour(radiusBlip, tonumber(('0x%02X%02X%02X%02X'):format(cfg.radiusBlip.colour.r, cfg.radiusBlip.colour.g, cfg.radiusBlip.colour.b, cfg.radiusBlip.colour.a)))
+    else
+        SetBlipColour(radiusBlip, cfg.blip.color)
+    end
+
     SetBlipFlashes(radiusBlip, cfg.radiusBlip.flash)
     SetBlipFlashInterval(radiusBlip, cfg.radiusBlip.flashTime)
 
@@ -98,8 +109,16 @@ UpdateZone = function(data)
 
     local radiusBlip = AddBlipForRadius(data.coords.x, data.coords.y, data.coords.z, data.radius)
 
-    SetBlipAlpha(radiusBlip, 140)
-    SetBlipColour(radiusBlip, cfg.blip.colour)
+    SetBlipAlpha(radiusBlip, cfg.radiusBlip.alpha)
+
+    if type(cfg.radiusBlip.color) == 'table' then
+        SetBlipColour(radiusBlip, tonumber(('0x%02X%02X%02X%02X'):format(cfg.radiusBlip.colour.r, cfg.radiusBlip.colour.g, cfg.radiusBlip.colour.b, cfg.radiusBlip.colour.a)))
+    else
+        SetBlipColour(radiusBlip, cfg.blip.color)
+    end
+
+    SetBlipFlashes(radiusBlip, cfg.radiusBlip.flash)
+    SetBlipFlashInterval(radiusBlip, cfg.radiusBlip.flashTime)
 
     BLIP_DATA[data.bId].radiusBlip = radiusBlip
 

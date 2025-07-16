@@ -16,6 +16,7 @@ An advanced restricted zone system for FiveM
 - Custom radius
 - Speedlimit
 - Automatic zone removal
+- Remove NPC cars
 - Sounds
 - Remove existing blips
 - ox_lib log

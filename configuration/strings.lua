@@ -72,4 +72,6 @@ Strings = {
 
     remove_alert_head = 'Are you sure',
     remove_alert_content = 'Do you want to remove this zone?',
+
+    remove_cars = 'Remove cars',
 }

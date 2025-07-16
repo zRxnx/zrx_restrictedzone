@@ -39,13 +39,14 @@ RegisterNetEvent('zrx_restrictedzone:server:zone', function(action, data)
         BLIP_DATA[bId].coords = data.coords
         BLIP_DATA[bId].index = data.index
         BLIP_DATA[bId].street = data.street
-        
+
         BLIP_DATA[bId].radius = data.radius
         BLIP_DATA[bId].text = data.text
 
         BLIP_DATA[bId].timeout = data.timeout
         BLIP_DATA[bId].speedlimit = data.speedlimit
         BLIP_DATA[bId].displayText = data.displayText
+        BLIP_DATA[bId].removeCars = data.removeCars
 
         BLIP_DATA[bId].bId = bId
 
