@@ -74,4 +74,7 @@ Strings = {
     remove_alert_content = 'Do you want to remove this zone?',
 
     remove_cars = 'Remove cars',
+
+    exit_zone = 'You have left a restricted zone',
+    enter_zone = 'You have entered a restricted zone',
 }

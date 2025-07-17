@@ -46,7 +46,8 @@ CreateZone = function(data)
             end
         end,
         onExit = function()
-            print('onExit')
+            ZRX_UTIL.notify(nil, Strings.exit_zone)
+
             BREAK[data.bId] = true
             IS_WHITELIST[data.bId] = false
 
@@ -57,7 +58,7 @@ CreateZone = function(data)
             SetVehicleMaxSpeed(VEHICLE[data.bId], 9999)
         end,
         onEnter = function()
-            print('onEnter')
+            ZRX_UTIL.notify(nil, Strings.enter_zone)
         end
     })
 

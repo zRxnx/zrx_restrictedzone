@@ -5,7 +5,7 @@ use_experimental_fxv2_oal 'yes'
 
 name 'zrx_restrictedzone'
 author 'zRxnx'
-version '2.1.0'
+version '2.1.1'
 description 'Advanced restricted zone system'
 repository 'https://github.com/zrxnx/zrx_restrictedzone'
 
